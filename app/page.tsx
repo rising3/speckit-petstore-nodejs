@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import Container from './components/Container';
+import Button from '../components/ui/Button';
 
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-start hero-gradient py-12">
-      <div className="site-container">
+      <Container>
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">Speckit Petstore</h1>
           <div className="hidden md:block text-sm text-muted">
@@ -27,7 +29,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </div>
+      </Container>
     </main>
   );
 }
