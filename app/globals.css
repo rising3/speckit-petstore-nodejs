@@ -1,0 +1,41 @@
+/* Ensure DaisyUI base styles are present as a fallback */
+@import "daisyui/dist/full.css";
+/* Modern UI tweaks */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Keep body classes in layout to avoid @apply issues with DaisyUI utilities */
+
+:root{
+	--radius-lg: 12px;
+}
+
+html,body{
+	height:100%;
+}
+
+body{
+	font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+	transition: background-color 200ms linear, color 200ms linear;
+}
+
+.site-container{
+	max-width: 1100px;
+	margin: 0 auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+.hero-gradient{
+	background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(236,72,153,0.04));
+}
+
+.card-modern{
+	border-radius: var(--radius-lg);
+}
+
+
