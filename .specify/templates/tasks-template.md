@@ -68,6 +68,11 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T007 Create base models/entities that all stories depend on
 - [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
+ - Tests located in `tests/` directory
+ - Use `jest` framework (or language-idiomatic equivalent)
+ - Test-First enforcement: tests MUST be created and included in the task list and must fail
+   before implementation begins. Contract tests (OpenAPI) and integration tests are REQUIRED
+   for any API or persistence changes.
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -249,3 +254,7 @@ With multiple developers:
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+ 
+**⚠️ Constitution Gate**: The Foundational phase MUST ensure the following are in place before
+user-story work begins: OpenAPI contract baseline, CI contract-test runner, observability hooks
+(request-id, `/metrics`), and test DB/migrations for integration tests.

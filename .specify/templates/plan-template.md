@@ -28,10 +28,21 @@
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
-
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+The following gates are derived from the project constitution and MUST be validated
+before research/design work proceeds:
+
+- OpenAPI contract present for any externally visible API surface (or a task to create it).
+- Test-First requirement: unit tests, integration tests, and contract tests MUST be defined
+  in the plan (tests should be written and fail before implementation).
+- Contract tests: OpenAPI-driven contract tests MUST exist or be included as tasks.
+- Observability: plan MUST document logging/metrics strategy (request ids, `/metrics`).
+- Performance: plan MUST list measurable performance goals or defer to repository defaults.
+- Security: plan MUST identify auth model, secrets handling, and applicable hardening tasks.
+- CI/Quality gates: plan MUST reference required CI checks (lint, fmt, type-check, test, contract tests).
+
+If any gate is intentionally deferred, include an explicit justification and a remediation task.
 
 ## Project Structure
 
