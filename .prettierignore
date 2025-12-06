@@ -1,0 +1,7 @@
+# Ignore generated/spec files and local feature specs
+.github/
+.specify/
+.vscode/
+.next/
+specs/
+next-env.d.ts

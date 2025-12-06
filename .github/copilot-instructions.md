@@ -2,20 +2,21 @@
 
 ## Repository Overview
 
-This repository contains the source code for the speckit Petstore application built with Node.js, Next.js, and TypeScript.
+This repository contains the source code for the speckit Petstore web application built with Node.js, Next.js, and TypeScript.
 
-- **Language**: node.js 24.x latest, typescript latest
-- **Framework**: nexst.js latest, react 18.x
-- **Middleware**: passport latest, passport-keycloak-oauth2-oidc-portable latest
-- **validation**: zod latest
-- **UI Library**: daisyui latest, tailwindcss latest
+- **Language**: node.js 24.x , typescript 5. x
+- **Framework**: next.js 16.x, react 18.x
+- **Middleware**: openid-client 6.x
+- **validation**: zod 4.x
+- **UI Library**: react-daisyui 5.x
 - **HTTP Server**: Next.js built-in server
-- **ORM**: Prisma latest
+- **ORM**: prisma 7.x
 - **Package Manager**: npm latest
-- **Linting**: eslint latest, prettier latest
-- **Testing**: jest latest , supertest latest
-- **API Specification**: OpenAPI Latest
-- **Authentication**: Keycloak latest
+- **Linting**: eslint 9.x
+- **Formatting**: prettier 3.x
+- **Testing**: jest 30.x , supertest 7.x
+- **API Specification**: OpenAPI 3.x
+- **Authentication**: Keycloak 26.x
 - **Database**: SQLite latest (development), PostgreSQL latest (production)
 
 ## Build Instructions
@@ -26,12 +27,14 @@ This repository contains the source code for the speckit Petstore application bu
 
 | Command | Description | Typical Duration |
 |---------|-------------|------------------|
-| `npm run build` | transpile and build `build/` | ~2 seconds |
+| `npm run dev` | Start the Next.js development server | ~2 seconds |
+| `npm run build` | Build the Next.js application | ~2 seconds |
+| `npm run start` | Start the Next.js server | ~2 seconds |
 | `npm run test` | Run all tests | ~5 seconds |
 | `npm run fmt` | Format code with prettier | ~1 second |
 | `npm run lint` | Run eslint | ~5 seconds |
 | `npm run all` | Run test → fmt → lint → build | ~15 seconds |
-| `npm run clean` | Remove `build/` directory | ~1 second |
+| `npm run clean` | Remove `.next` directory | ~1 second |
 
 ### Recommended Workflow
 
@@ -49,45 +52,59 @@ npm run all
 .
 ├── .github/copilot-instructions.md  # GitHub Copilot instructions (this file)
 ├── .github/workflows/ci.yaml        # CI pipeline
-├── src/                             # server-side and shared logic
-│   └── ...                   
-├── pages/                           # Next.js pages (routing)
-│   ├── index.tsx
-│   └── ...                   
-├── components/                      # React components
-│   └── ...                   
-├── public/                          # Static files (images, etc.)
-│   └── ...                   
-├── styles/                          # CSS and styling files
-│   └── ...                   
-├── tests/                           # Jest test code
+├── app/
+│   ├── api/
+│   │   └── hello/
+│   │       └── route.ts
+│   ├── actions/
+│   │   └── aaa-action.ts
+│   └── page.tsx
+├── components/
+├── hooks/
+├── lib/
+├── utils/
+├── styles/
+├── types/
+├── stores/
+├── constants/
+├── public/
+├── __tests__/                       # Jest test code
 │   └── ...                   
 ├── docker-compose.yaml              # Container definitions for local development
 ├── keycloak/                        # Keycloak configuration and initialization files
 │   └── ...                   
 ├── node_modules/             
 ├── package.json              
+├── next.config.js
 ├── tsconfig.json             
-├── next.config.js                   # Next.js configuration
-├── .eslintrc.json            
-├── .prettierrc               
 ├── jest.config.js            
+├── eslint.config.cjs            
+├── .prettierignore
+├── .prettierrc
 ├── .gitignore                
 └── README.md                 
 ```
 
 ## Key Files
 
-- `src/`: Server-side and shared logic (if any)
-- `pages/`: Next.js pages (routing)
+- `app/`: Next.js application code
 - `components/`: React components
-- `public/`: Static files (images, etc.)
+- `hooks/`: Custom React hooks
+- `lib/`: Library code
+- `utils/`: Utility functions
 - `styles/`: CSS and styling files
-- `tests/`: Jest test code
+- `types/`: TypeScript type definitions
+- `stores/`: State management stores
+- `constants/`: Application constants
+- `public/`: Public static assets
+- `__tests__/`: Jest test code
+- `package.json`: npm scripts and dependencies
 - `next.config.js`: Next.js configuration
-- `.eslintrc.json`: ESLint configuration
-- `.prettierrc`: Prettier configuration
+- `tsconfig.json`: TypeScript configuration
 - `jest.config.js`: Jest configuration  
+- `eslint.config.cjs`: ESLint configuration            
+- `.prettierignore`: Prettier ignore file 
+- `.prettierrc`: Prettier configuration
 
 ## CI Pipeline
 
@@ -104,7 +121,7 @@ The `.github/workflows/ci.yaml` runs on PRs to `main`, `next`, and `feature/**` 
 
 ## Testing
 
-- Tests located in `tests/` directory
+- Tests located in `__tests__/` directory
 - Use `jest` framework
 - Mock external dependencies as needed
 - Run tests with `npm run test`
@@ -113,7 +130,7 @@ The `.github/workflows/ci.yaml` runs on PRs to `main`, `next`, and `feature/**` 
 
 - Use `prettier` for formatting
 - Follow JavaScript/TypeScript conventions for naming
-- Organize code in `src/` directory
+- Organize code in `app/` directory
 - Use ESLint for linting
 - Run `npm run fmt` and `npm run lint` before commits
 

@@ -1,9 +1,11 @@
 # Petstore アプリケーション 仕様書（移植向け）
+
 目的: Java EE 実装（agoncal/agoncal-application-petstore-ee7）を、生成AI/開発者が Java 以外の言語（例: JavaScript/TypeScript, Python, Go, C# など）へ移植するために必要な情報を一式記述する。
 
 ---
 
 ## 1. 概要と範囲
+
 - 対象: ペット管理（Pet）、ユーザー（User）、注文（Order）、カテゴリ（Category）などの CRUD とそれらに関連する業務ロジック。
 - 優先事項: API 契約（エンドポイント / リクエスト / レスポンス）、データモデル、永続化スキーマ、ビジネスルール、認証/認可、イベント定義、エラー仕様。
 - 非対象（明示）: UI の細かなワイヤーフレーム。UI は移植時に各フレームワーク固有で実装。
@@ -11,6 +13,7 @@
 ---
 
 ## 2. 高レベルアーキテクチャ
+
 - クライアント <-> REST API（JSON）: 主な通信方式は HTTPS/JSON の同期 REST。
 - 永続化: RDBMS（推奨: PostgreSQL / MySQL）。ORM を用いたエンティティマッピング。
 - 認証: JWT ベースのアクセストークン（Bearer token）。
@@ -20,6 +23,7 @@
 ---
 
 ## 3. ドメインモデル（概念説明）
+
 - Pet
   - 概要: 販売/表示対象のペット。
   - 属性（主要）: id, name, category, photoUrls[], tags[], status
@@ -40,6 +44,7 @@
   - created_at, updated_at, created_by, updated_by, version（楽観ロック）
 
 関係:
+
 - Pet 1:N Tag (多対多なら中間テーブル)
 - Pet N:1 Category
 - Order N:1 Pet
@@ -48,6 +53,7 @@
 ---
 
 ## 4. API エンドポイント一覧（主要）
+
 すべて JSON 入力/出力。認証なしで公開できるもの、認証必須のものを示す。
 
 注意: path, method, 説明, 認可 を記載。各エンドポイントで共通するエラーレスポンスは仕様書後半を参照。
@@ -109,59 +115,63 @@
 ---
 
 ## 5. リクエスト/レスポンス JSON スキーマ（主要）
+
 以下は移植用にそのまま使える JSON スキーマ（OpenAPI コンポーネント風）例。
 
 - Pet
+
 ```json
 {
   "Pet": {
     "type": "object",
-    "required": ["id","name","status"],
+    "required": ["id", "name", "status"],
     "properties": {
-      "id": {"type":"integer","format":"int64"},
-      "name": {"type":"string"},
-      "category": {"$ref":"#/components/schemas/Category"},
-      "photoUrls": {"type":"array","items":{"type":"string","format":"uri"}},
-      "tags": {"type":"array","items":{"$ref":"#/components/schemas/Tag"}},
-      "status": {"type":"string","enum":["AVAILABLE","PENDING","SOLD"]},
-      "created_at": {"type":"string","format":"date-time"},
-      "updated_at": {"type":"string","format":"date-time"}
+      "id": { "type": "integer", "format": "int64" },
+      "name": { "type": "string" },
+      "category": { "$ref": "#/components/schemas/Category" },
+      "photoUrls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+      "tags": { "type": "array", "items": { "$ref": "#/components/schemas/Tag" } },
+      "status": { "type": "string", "enum": ["AVAILABLE", "PENDING", "SOLD"] },
+      "created_at": { "type": "string", "format": "date-time" },
+      "updated_at": { "type": "string", "format": "date-time" }
     }
   }
 }
 ```
 
 - Order
+
 ```json
 {
   "Order": {
-    "type":"object",
-    "required":["id","petId","quantity","status"],
-    "properties":{
-      "id":{"type":"integer","format":"int64"},
-      "petId":{"type":"integer","format":"int64"},
-      "quantity":{"type":"integer","minimum":1},
-      "shipDate":{"type":"string","format":"date-time"},
-      "status":{"type":"string","enum":["PLACED","APPROVED","DELIVERED","CANCELLED"]},
-      "complete":{"type":"boolean"}
+    "type": "object",
+    "required": ["id", "petId", "quantity", "status"],
+    "properties": {
+      "id": { "type": "integer", "format": "int64" },
+      "petId": { "type": "integer", "format": "int64" },
+      "quantity": { "type": "integer", "minimum": 1 },
+      "shipDate": { "type": "string", "format": "date-time" },
+      "status": { "type": "string", "enum": ["PLACED", "APPROVED", "DELIVERED", "CANCELLED"] },
+      "complete": { "type": "boolean" }
     }
   }
 }
 ```
 
 - UserRegister
+
 ```json
 {
   "UserRegister": {
-    "type":"object",
-    "required":["username","password","email"],
-    "properties":{
-      "username":{"type":"string","minLength":3,"maxLength":50},
-      "password":{"type":"string","minLength":8},
-      "email":{"type":"string","format":"email"},
-      "firstName":{"type":"string"},
-      "lastName":{"type":"string"},
-      "phone":{"type":"string"}
+    "type": "object",
+    "required": ["username", "password", "email"],
+    "properties": {
+      "username": { "type": "string", "minLength": 3, "maxLength": 50 },
+      "password": { "type": "string", "minLength": 8 },
+      "email": { "type": "string", "format": "email" },
+      "firstName": { "type": "string" },
+      "lastName": { "type": "string" },
+      "phone": { "type": "string" }
     }
   }
 }
@@ -172,9 +182,11 @@
 ---
 
 ## 6. データベース設計（RDBMS 推奨：PostgreSQL）
+
 DDL（抜粋）
 
 - pets
+
 ```sql
 CREATE TABLE pets (
   id BIGSERIAL PRIMARY KEY,
@@ -190,6 +202,7 @@ CREATE INDEX idx_pets_status ON pets(status);
 ```
 
 - categories
+
 ```sql
 CREATE TABLE categories (
   id BIGSERIAL PRIMARY KEY,
@@ -198,6 +211,7 @@ CREATE TABLE categories (
 ```
 
 - tags
+
 ```sql
 CREATE TABLE tags (
   id BIGSERIAL PRIMARY KEY,
@@ -206,6 +220,7 @@ CREATE TABLE tags (
 ```
 
 - pet_tags (many-to-many)
+
 ```sql
 CREATE TABLE pet_tags (
   pet_id BIGINT REFERENCES pets(id) ON DELETE CASCADE,
@@ -215,6 +230,7 @@ CREATE TABLE pet_tags (
 ```
 
 - orders
+
 ```sql
 CREATE TABLE orders (
   id BIGSERIAL PRIMARY KEY,
@@ -230,6 +246,7 @@ CREATE INDEX idx_orders_status ON orders(status);
 ```
 
 - users
+
 ```sql
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
@@ -245,6 +262,7 @@ CREATE TABLE users (
 ```
 
 注意点:
+
 - パスワードは必ずハッシュ保存（bcrypt/argon2 等）。
 - photo_urls は JSONB（配列の URL）で簡易に扱えるようにしている。
 - 楽観ロック用に version (INT) を利用することを推奨。
@@ -252,6 +270,7 @@ CREATE TABLE users (
 ---
 
 ## 7. バリデーションとビジネスルール
+
 - Pet
   - name は空でないこと。
   - status は定義済み enum のみ。
@@ -272,6 +291,7 @@ CREATE TABLE users (
 ---
 
 ## 8. 認証・認可（推奨）
+
 - 認証方式
   - OAuth2 の Password Grant もしくはシンプルに JWT 発行（POST /api/auth/login）で Access Token を返却。
   - Access Token は Authorization: Bearer <token> で送る。
@@ -290,9 +310,11 @@ CREATE TABLE users (
 ---
 
 ## 9. エラー仕様（共通フォーマット）
+
 - HTTP ステータスとボディ（JSON）例:
 
 共通エラーボディ:
+
 ```json
 {
   "error": {
@@ -305,7 +327,8 @@ CREATE TABLE users (
 ```
 
 主要ステータス:
-- 400 Bad Request: 入力バリデーションエラー（コード: VALIDATION_ERROR）  
+
+- 400 Bad Request: 入力バリデーションエラー（コード: VALIDATION_ERROR）
   - details にフィールド別エラー配列を含める
 - 401 Unauthorized: 認証失敗（INVALID_CREDENTIALS / TOKEN_EXPIRED）
 - 403 Forbidden: 権限不足（FORBIDDEN）
@@ -316,41 +339,45 @@ CREATE TABLE users (
 ---
 
 ## 10. 非同期イベント（メッセージ定義）
+
 メッセージは JSON。バージョン管理のために "specVersion" と "eventId" を含める。
 
 - topic: order.created
+
 ```json
 {
-  "specVersion":"1.0",
-  "eventId":"uuid-v4",
-  "eventType":"order.created",
-  "timestamp":"2025-01-01T12:00:00Z",
-  "data":{
-    "orderId":123,
-    "petId":456,
-    "userId":789,
-    "quantity":1,
-    "status":"PLACED",
-    "shipDate":"2025-01-05T10:00:00Z"
+  "specVersion": "1.0",
+  "eventId": "uuid-v4",
+  "eventType": "order.created",
+  "timestamp": "2025-01-01T12:00:00Z",
+  "data": {
+    "orderId": 123,
+    "petId": 456,
+    "userId": 789,
+    "quantity": 1,
+    "status": "PLACED",
+    "shipDate": "2025-01-05T10:00:00Z"
   }
 }
 ```
 
 - topic: pet.updated
+
 ```json
 {
-  "specVersion":"1.0",
-  "eventId":"uuid-v4",
-  "eventType":"pet.updated",
-  "timestamp":"2025-01-02T09:00:00Z",
-  "data":{
-    "petId":456,
-    "status":"SOLD"
+  "specVersion": "1.0",
+  "eventId": "uuid-v4",
+  "eventType": "pet.updated",
+  "timestamp": "2025-01-02T09:00:00Z",
+  "data": {
+    "petId": 456,
+    "status": "SOLD"
   }
 }
 ```
 
 イベント設計の要点:
+
 - 冪等性: consumer は eventId で冪等に処理できるようにする。
 - スキーマ: JSON Schema で管理、互換性を保つ（バージョニング）。
 - 配信保証: at-least-once を想定、consumer 側で重複処理に耐えること。
@@ -358,6 +385,7 @@ CREATE TABLE users (
 ---
 
 ## 11. トランザクションと同時実行（整合性）
+
 - 注文作成など整合性が必要な操作は単一 DB トランザクションで行う。
 - 高競合箇所（在庫や状態更新）は楽観ロック（version カラム）を採用。更新時に version チェック、失敗時はクライアントに 409 を返す。
 - 分散処理: マイクロサービス間で整合性が必要な場合は Saga パターン（補償トランザクション）を採用。
@@ -365,8 +393,10 @@ CREATE TABLE users (
 ---
 
 ## 12. API 例（サンプル）
+
 - ペット作成（Admin）
-curl:
+  curl:
+
 ```bash
 curl -X POST "https://api.example.com/api/pets" \
   -H "Authorization: Bearer <token>" \
@@ -379,7 +409,9 @@ curl -X POST "https://api.example.com/api/pets" \
     "status":"AVAILABLE"
   }'
 ```
+
 - 注文作成
+
 ```bash
 curl -X POST "https://api.example.com/api/orders" \
   -H "Authorization: Bearer <token>" \
@@ -394,6 +426,7 @@ curl -X POST "https://api.example.com/api/orders" \
 ---
 
 ## 13. ロギング・監視・テスト
+
 - ロギング: 機密情報（パスワード, トークン）を絶対にログに出さない。リクエストID（X-Request-Id）を付与して相関ログを可能に。
 - メトリクス: /metrics エンドポイント（Prometheus 用）や APDEX, レイテンシ分布を計測。
 - テスト:
@@ -405,6 +438,7 @@ curl -X POST "https://api.example.com/api/orders" \
 ---
 
 ## 14. 移植時の言語/フレームワークマッピング指針
+
 以下は Java EE の一般的コンポーネントと、移植先での推奨対応例。
 
 - JAX-RS (REST) → Node.js: Express / Fastify、TypeScript: NestJS、Python: FastAPI / Flask、Go: Gin / Echo、C#: ASP.NET Core
@@ -424,6 +458,7 @@ curl -X POST "https://api.example.com/api/orders" \
 - メッセージング（JMS）→ Kafka client / RabbitMQ client（言語別クライアントを利用）
 
 移植ポイント:
+
 - DTO と エンティティを明確に分離する（API スキーマと DB スキーマを分離し、変換処理を組み込む）。
 - トランザクション境界をはっきりさせる（サービス層で開始/コミット/ロールバック）。
 - 並行更新対策: 楽観ロック実装（version）を必ず移植する。
@@ -433,6 +468,7 @@ curl -X POST "https://api.example.com/api/orders" \
 ---
 
 ## 15. デプロイ・運用に関する推奨
+
 - コンテナ化（Docker）を推奨。Kubernetes 上でのデプロイを想定。
 - 環境ごとの設定は環境変数（12-factor 準拠）。
 - シークレットは Vault / KMS に保存。
@@ -442,6 +478,7 @@ curl -X POST "https://api.example.com/api/orders" \
 ---
 
 ## 16. 開発・移植用チェックリスト（短縮）
+
 - [ ] OpenAPI（または Swagger）で API を厳密に定義
 - [ ] JSON Schema を全スキーマに対して用意
 - [ ] DB スキーマ（DDL）を移植先 DB 向けに調整
@@ -455,4 +492,5 @@ curl -X POST "https://api.example.com/api/orders" \
 ---
 
 ## 17. 付録
+
 - OpenAPI仕様: petstore-openai.yaml

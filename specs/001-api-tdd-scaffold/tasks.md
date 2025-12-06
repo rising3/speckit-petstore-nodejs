@@ -47,6 +47,9 @@ Final Phase: Polish & Cross-cutting concerns
 - [ ] T029 Add PR template / checklist requiring `npm run all` in PR description (`.github/PULL_REQUEST_TEMPLATE.md`)
 - [ ] T030 Document how contract tests map to OpenAPI operations in `specs/001-api-tdd-scaffold/contracts/README.md` (`specs/001-api-tdd-scaffold/contracts/README.md`)
 
+# Local additions for quick demo
+- [X] T999 Add demo Hello endpoint and UI (`app/api/hello/route.ts`, `app/hello/page.tsx`)
+
 Dependencies (story completion order)
 
 - US1 must complete before US2 and US3 can be considered fully verified (US1 provides the runnable scaffold and scripts).
